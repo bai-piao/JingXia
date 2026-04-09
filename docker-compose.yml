@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  jingxia-core:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    environment:
+      JINGXIA_STORAGE_DIRNAME: /app/storage
+      PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-http://127.0.0.1:8000}
+      AI_API_BASE_URL: ${AI_API_BASE_URL:-http://host.docker.internal:8081/v1}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./my_data:/app/storage
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/v1/health', timeout=5)"
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    restart: always
+
+  jingxia-bot:
+    build:
+      context: .
+      dockerfile: Dockerfile.bot
+    env_file:
+      - .env
+    environment:
+      TG_BOT_TOKEN: ${TG_BOT_TOKEN}
+      JINGXIA_API_BASE: http://jingxia-core:8000/api/v1
+    depends_on:
+      jingxia-core:
+        condition: service_healthy
+    restart: always
+
+  jingxia-web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    env_file:
+      - .env
+    ports:
+      - "8080:80"
+    depends_on:
+      jingxia-core:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1/ || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: always

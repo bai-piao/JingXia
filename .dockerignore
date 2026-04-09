@@ -1,0 +1,31 @@
+.git
+.gitignore
+.DS_Store
+
+# Python caches and virtualenvs
+__pycache__/
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Local environment and runtime data
+.env
+.env.local
+.env.*.local
+*.db
+jingxia.db
+storage/
+my_data/
+ai-weights/
+
+# Frontend build artifacts and dependencies
+node_modules/
+dist/
+.vite/
+
+# Repo extras not needed in runtime image
+README.md
