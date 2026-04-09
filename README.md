@@ -162,6 +162,8 @@ pip install -r requirements.txt
 
 `jingxia-core` 通过 HTTP 调用 AI，不在进程内加载模型。
 
+建议使用模型：https://modelscope.cn/models/lmstudio-community/Qwen2.5-VL-3B-Instruct-GGUF
+
 示例：
 
 ```bash
