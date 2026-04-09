@@ -302,11 +302,6 @@ docker compose up --build
 
 ### 9.5 Docker 下 `PUBLIC_BASE_URL` 该怎么填
 
-这是 Docker 部署里最容易配错的一项。
-
-规则只有一条：
-
-- `PUBLIC_BASE_URL` 必须填写“用户最终从浏览器、Bot、外部设备访问图片时看到的那个入口地址”
 
 例子：
 
